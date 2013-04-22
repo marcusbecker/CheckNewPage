@@ -13,21 +13,6 @@ import java.net.URL;
  */
 public class App {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void load() {
-        try {
-            URL u = new URL("http://99vidas.com.br/99vidas-80");
-            HttpURLConnection huc = (HttpURLConnection) u.openConnection();
-            huc.setRequestMethod("GET");  //OR  huc.setRequestMethod ("HEAD"); 
-            huc.connect();
-            int code = huc.getResponseCode();
-            System.out.println(code);
-        } catch (Exception e) {
-        }
-    }
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
