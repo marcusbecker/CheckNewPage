@@ -111,7 +111,7 @@ public class Application {
                 c.setNovo(true);
                 c.setStatus("Nova página!");
             }
-
+ 
             System.out.println("Check: " + nURL);
 
         } catch (Exception e) {
