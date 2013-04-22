@@ -105,6 +105,7 @@ public class Application {
             int code = huc.getResponseCode();
 
             if (code == 404) {
+                c.setNovo(false);
                 c.setStatus("Sem mudança.");
             } else if (code == 200) {
                 c.setNovo(true);
