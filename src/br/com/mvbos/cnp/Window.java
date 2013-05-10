@@ -358,6 +358,8 @@ public class Window extends javax.swing.JFrame implements IUpadate {
             lblDesc.setText(Application.decodeURL(
                     tableModel.getCliente(tabela.getSelectedRow()).getUrl(),
                     tableModel.getCliente(tabela.getSelectedRow()).getContadorAtual()));
+            
+            Application.save(tableModel.getValues());
         }
     }//GEN-LAST:event_tabelaMouseClicked
 
