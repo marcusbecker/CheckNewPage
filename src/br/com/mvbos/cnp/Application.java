@@ -36,6 +36,7 @@ public class Application {
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("mm:ss");
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy mm:ss");
 
+
     public static void save(List<CadastroURL> values) {
         ioo.save(arquivo, values);
     }
@@ -51,7 +52,7 @@ public class Application {
         return lst;
     }
 
-    public static void startAutoCheck(final List<CadastroURL> lst) {
+    public static synchronized void startAutoCheck(final List<CadastroURL> lst) {
         new Thread() {
             @Override
             public void run() {
@@ -92,7 +93,26 @@ public class Application {
         return nURL;
     }
 
-    public static void verificar(CadastroURL c) {
+    public static boolean validar(CadastroURL c) {
+        try {
+            //String regex = "\\b(https?|ftp|file)://[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|]";
+            String url = decodeURL(c.getUrl(), c.getContadorAtual());
+
+            if (url.substring(url.indexOf(".") + 1).trim().length() == 0) {
+                return false;
+            }
+
+            URL u = new URL(url);
+            return true;
+
+        } catch (Exception ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+
+        return false;
+    }
+
+    public static synchronized void verificar(CadastroURL c) {
 
         String nURL = null;
         try {
@@ -106,12 +126,12 @@ public class Application {
 
             if (code == 404) {
                 c.setNovo(false);
-                c.setStatus("Sem mudança.");
+                c.setStatus(Strings.SEM_MUDANCA);
             } else if (code == 200) {
                 c.setNovo(true);
-                c.setStatus("Nova página!");
+                c.setStatus(Strings.NOVA_PAGINA);
             }
- 
+
             System.out.println("Check: " + nURL);
 
         } catch (Exception e) {
@@ -130,7 +150,7 @@ public class Application {
     public static void proximoLink(CadastroURL c) {
         c.setContadorAtual(c.getContadorProximo());
         c.setContadorProximo(c.getContadorProximo() + 1);
-        c.setStatus("Acabou de mudar.");
+        c.setStatus(Strings.ACABOU_DE_MUDAR);
     }
 
     public static int getMinutosVerificacao() {

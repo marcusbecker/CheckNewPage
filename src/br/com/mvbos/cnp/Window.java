@@ -59,7 +59,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
 
         Application.startAutoCheck(tableModel.getValues());
         Application.update = this;
-        lblTimeCheck.setText(Application.getMinutosVerificacao() + " minutos.");
+        lblTimeCheck.setText(Application.getMinutosVerificacao() + Strings.MINUTOS);;
         swork.execute();
     }
 
@@ -98,9 +98,9 @@ public class Window extends javax.swing.JFrame implements IUpadate {
 
         final SystemTray tray = SystemTray.getSystemTray();
 
-        MenuItem sobre = new MenuItem("Sobre");
-        MenuItem verificar = new MenuItem("Verificar");
-        MenuItem sair = new MenuItem("Sair");
+        MenuItem sobre = new MenuItem(Strings.SOBRE);
+        MenuItem verificar = new MenuItem(Strings.VERIFICAR);
+        MenuItem sair = new MenuItem(Strings.SAIR);
 
         popup.add(verificar);
         popup.add(sobre);
@@ -108,7 +108,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
         popup.add(sair);
 
         trayIcon.setPopupMenu(popup);
-        trayIcon.setToolTip("Vê se atualizou!");
+        trayIcon.setToolTip(Strings.TITLE);
         //trayIcon.setImageAutoSize(true);
 
         try {
@@ -136,8 +136,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
         sobre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,
-                        "Versão 0.1 - Beta test");
+                JOptionPane.showMessageDialog(null, Strings.VERSAO);
             }
         });
 
@@ -172,6 +171,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
         lblNextCheck = new javax.swing.JLabel();
         lblTimeCheck = new javax.swing.JLabel();
         lblDesc = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuVerAuto = new javax.swing.JMenuItem();
@@ -232,6 +232,9 @@ public class Window extends javax.swing.JFrame implements IUpadate {
 
         lblDesc.setText("URL");
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("https://github.com/marcusbecker/CheckNewPage");
+
         jMenu1.setText("Aplicativo");
 
         mnuVerAuto.setText("Tempo");
@@ -272,7 +275,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(tfUrl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -281,9 +284,10 @@ public class Window extends javax.swing.JFrame implements IUpadate {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tfVarNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 532, Short.MAX_VALUE)
                         .addComponent(btnVerificar))
                     .addComponent(lblDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -298,7 +302,8 @@ public class Window extends javax.swing.JFrame implements IUpadate {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfVarNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -314,10 +319,16 @@ public class Window extends javax.swing.JFrame implements IUpadate {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         CadastroURL c = new CadastroURL(tfUrl.getText(), Integer.valueOf(tfVarNumero.getText()));
-        tableModel.addCadastro(c);
-        Application.save(tableModel.getValues());
-        Application.verificar(c);
-        tableModel.fireTableDataChanged();
+
+        if (Application.validar(c)) {
+            tableModel.addCadastro(c);
+            Application.save(tableModel.getValues());
+            Application.verificar(c);
+            tableModel.fireTableDataChanged();
+
+        } else {
+            lblDesc.setText(Strings.URL_INVALIDA);
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
@@ -339,7 +350,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
     }//GEN-LAST:event_formWindowClosing
 
     private void mnuVerAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuVerAutoActionPerformed
-        JDialog dlg = new JDialog(window, "Tempo de verificação automática.");
+        JDialog dlg = new JDialog(window, Strings.TEMPO_DE_VERIFICACAO);
         SetTimeCheck pn = new SetTimeCheck();
         pn.setTime(Application.getMinutosVerificacao());
 
@@ -358,7 +369,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
             lblDesc.setText(Application.decodeURL(
                     tableModel.getCliente(tabela.getSelectedRow()).getUrl(),
                     tableModel.getCliente(tabela.getSelectedRow()).getContadorAtual()));
-            
+
             Application.save(tableModel.getValues());
         }
     }//GEN-LAST:event_tabelaMouseClicked
@@ -391,6 +402,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnVerificar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -420,7 +432,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
 
         for (CadastroURL c : tableModel.getValues()) {
             if (c.isNovo()) {
-                trayIcon.displayMessage("Nova página!",
+                trayIcon.displayMessage(Strings.NOVA_PAGINA,
                         Application.decodeURL(c.getUrl(), c.getContadorProximo()), TrayIcon.MessageType.INFO);
 
                 break;
@@ -435,7 +447,7 @@ public class Window extends javax.swing.JFrame implements IUpadate {
                     lblTimeCheck.setText(" " + Application.timeFormat.format(
                             new Date(Application.nextCheck - System.currentTimeMillis())));
                 } else {
-                    lblTimeCheck.setText("Agora!");
+                    lblTimeCheck.setText(Strings.AGORA);
                 }
                 try {
                     Thread.sleep(500);

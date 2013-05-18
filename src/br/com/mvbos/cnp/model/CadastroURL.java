@@ -4,6 +4,7 @@
  */
 package br.com.mvbos.cnp.model;
 
+import br.com.mvbos.cnp.Strings;
 import java.io.Serializable;
 
 /**
@@ -13,7 +14,7 @@ import java.io.Serializable;
 public class CadastroURL implements Serializable {
 
     private String url;
-    private String status = "Sem mudança.";
+    private String status = Strings.SEM_MUDANCA;
     private int contadorAtual;
     private int contadorProximo;
     private boolean novo;
