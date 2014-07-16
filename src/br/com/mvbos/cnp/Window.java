@@ -87,14 +87,22 @@ public class Window extends javax.swing.JFrame implements IUpadate {
         });
     }
 
+    private SystemTray createSysTray() {
+        if (SystemTray.isSupported()) {
+            return SystemTray.getSystemTray();
+        } else {
+            return null;
+        }
+    }
+    
     private static TrayIcon createTrayIcon(final Window w) {
         if (!SystemTray.isSupported()) {
             System.out.println("SystemTray is not supported");
             return null;
         }
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon =
-                new TrayIcon((new ImageIcon(Window.class.getResource("img/lupa.png"), "tray icon")).getImage());
+        final TrayIcon trayIcon
+                = new TrayIcon((new ImageIcon(Window.class.getResource("img/lupa.png"), "tray icon")).getImage());
 
         final SystemTray tray = SystemTray.getSystemTray();
 
@@ -458,14 +466,6 @@ public class Window extends javax.swing.JFrame implements IUpadate {
             return null;
         }
     };
-
-    private SystemTray createSysTray() {
-        if (SystemTray.isSupported()) {
-            return SystemTray.getSystemTray();
-        } else {
-            return null;
-        }
-    }
 
     private void verificar() {
         for (CadastroURL c : tableModel.getValues()) {
